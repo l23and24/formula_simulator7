@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сила тертя</title>
+    <title>Сила тертя (з переводом одиниць)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -54,7 +54,7 @@
 
             <div class="bg-teal-50 p-4 rounded-xl inline-block border border-teal-100 shadow-sm">
                 <p class="text-2xl text-teal-900 font-serif italic">$F_{терт} = \mu \cdot N$</p>
-                <p class="text-sm text-teal-700 mt-1">Де $\mu$ — коефіцієнт тертя, $N$ — сила реакції опори</p>
+                <p class="text-sm text-teal-700 mt-1">Звертайте увагу на одиниці вимірювання ($кН$, $мН$)</p>
             </div>
         </header>
 
@@ -97,6 +97,10 @@
                 </svg>
             </div>
             <div id="modal-formula" class="text-center text-xl font-serif text-teal-700 min-h-[1.5rem]"></div>
+            <div class="mt-4 p-3 bg-slate-50 rounded text-xs text-slate-500">
+                $1\text{ кН} = 1000\text{ Н}$<br>
+                $1\text{ мН} = 0,001\text{ Н}$
+            </div>
         </div>
     </div>
 
@@ -118,10 +122,10 @@
     <script>
         const exercises = [
             { mu: "0.2", n: "50 Н", f: null, options: [2, 5, 10, 25, 50], correct: 10, target: 'F' },
-            { mu: null, n: "40 Н", f: "4 Н", options: [0.1, 0.2, 0.4, 1, 4], correct: 0.1, target: 'mu' },
-            { mu: "0.5", n: null, f: "100 Н", options: [50, 100, 200, 400, 500], correct: 200, target: 'N' },
-            { mu: "0.25", n: "80 Н", f: null, options: [10, 20, 40, 60, 80], correct: 20, target: 'F' },
-            { mu: null, n: "200 Н", f: "60 Н", options: [0.1, 0.2, 0.3, 0.4, 0.5], correct: 0.3, target: 'mu' }
+            { mu: null, n: "1 кН", f: "100 Н", options: [0.01, 0.1, 0.2, 0.5, 1], correct: 0.1, target: 'mu' },
+            { mu: "0.4", n: null, f: "200 мН", options: [0.05, 0.5, 5, 50, 500], correct: 0.5, target: 'N' },
+            { mu: "0.3", n: "2 кН", f: null, options: [6, 60, 600, 6000, 60000], correct: 600, target: 'F' },
+            { mu: null, n: "400 Н", f: "80 мН", options: [0.0002, 0.002, 0.02, 0.2, 2], correct: 0.0002, target: 'mu' }
         ];
 
         let startTime, timerInterval;
@@ -160,7 +164,7 @@
 
         function checkAnswer(index, select) {
             const val = parseFloat(select.value);
-            const isCorrect = Math.abs(val - exercises[index].correct) < 0.0001;
+            const isCorrect = Math.abs(val - exercises[index].correct) < 0.000001;
             const cell = select.parentElement;
             
             startTimer();
