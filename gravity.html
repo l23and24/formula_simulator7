@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сила тяжіння</title>
+    <title>Сила тяжіння (з переводом одиниць)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = {
@@ -55,7 +54,7 @@
 
             <div class="bg-orange-50 p-4 rounded-xl inline-block border border-orange-100 shadow-sm">
                 <p class="text-2xl text-orange-900 font-serif italic">$F_{тяж} = m \cdot g$</p>
-                <p class="text-sm text-orange-700 mt-1">Прийміть $g \approx 10$ Н/кг</p>
+                <p class="text-sm text-orange-700 mt-1">Прийміть $g \approx 10$ Н/кг. Увага на одиниці ($г$, $т$, $кН$)!</p>
             </div>
         </header>
 
@@ -98,6 +97,10 @@
                 </svg>
             </div>
             <div id="modal-formula" class="text-center text-xl font-serif text-orange-700 min-h-[1.5rem]"></div>
+            <div class="mt-4 p-3 bg-slate-50 rounded text-xs text-slate-500">
+                $1\text{ т} = 1000\text{ кг}$ | $1\text{ г} = 0,001\text{ кг}$<br>
+                $1\text{ кН} = 1000\text{ Н}$ | $1\text{ мН} = 0,001\text{ Н}$
+            </div>
         </div>
     </div>
 
@@ -118,11 +121,11 @@
 
     <script>
         const exercises = [
-            { m: "2 кг", g: "10 Н/кг", f: null, options: [0.2, 2, 12, 20, 200], correct: 20, target: 'F' },
-            { m: null, g: "10 Н/кг", f: "100 Н", options: [1, 10, 50, 100, 1000], correct: 10, target: 'm' },
-            { m: "0.5 кг", g: "10 Н/кг", f: null, options: [0.05, 0.5, 5, 50, 500], correct: 5, target: 'F' },
-            { m: "300 г", g: "10 Н/кг", f: null, options: [0.3, 3, 30, 300, 3000], correct: 3, target: 'F' },
-            { m: null, g: "10 Н/кг", f: "45 Н", options: [0.45, 4.5, 45, 450, 4500], correct: 4.5, target: 'm' }
+            { m: "500 г", g: "10 Н/кг", f: null, options: [0.05, 0.5, 5, 50, 5000], correct: 5, target: 'F' },
+            { m: null, g: "10 Н/кг", f: "2 кН", options: [0.2, 2, 20, 200, 2000], correct: 200, target: 'm' },
+            { m: "3 т", g: "10 Н/кг", f: null, options: [30, 300, 3000, 30000, 300000], correct: 30000, target: 'F' },
+            { m: null, g: "10 Н/кг", f: "40 мН", options: [0.004, 0.04, 0.4, 4, 40], correct: 0.004, target: 'm' },
+            { m: "0.2 кг", g: "10 Н/кг", f: null, options: [0.02, 0.2, 2, 20, 200], correct: 2, target: 'F' }
         ];
 
         let startTime, timerInterval;
@@ -161,7 +164,7 @@
 
         function checkAnswer(index, select) {
             const val = parseFloat(select.value);
-            const isCorrect = Math.abs(val - exercises[index].correct) < 0.0001;
+            const isCorrect = Math.abs(val - exercises[index].correct) < 0.000001;
             const cell = select.parentElement;
             
             startTimer();
@@ -229,7 +232,7 @@
                         
                         const unit = document.createElement('span');
                         unit.className = "text-slate-500 text-xs md:text-sm font-medium w-8 text-left";
-                        unit.textContent = col === 'm' ? 'кг' : (col === 'g' ? 'Н/кг' : 'Н');
+                        unit.textContent = col === 'm' ? 'кг' : 'Н';
 
                         const infoBtn = document.createElement('button');
                         infoBtn.className = "text-orange-500 p-1 hover:scale-110 transition";
