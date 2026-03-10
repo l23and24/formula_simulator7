@@ -3,120 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фізика: Тренувальні вправи</title>
-    <!-- Підключення Tailwind CSS для стилів -->
+    <title>Закон Гука</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Покращене підключення MathJax для миттєвого відображення -->
     <script>
         window.MathJax = {
-          tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            displayMath: [['$$', '$$'], ['\\[', '\\]']]
-          },
-          options: {
-            processHtmlClass: 'mathjax-process'
-          }
+            tex: { inlineMath: [['$', '$']] },
+            svg: { fontCache: 'global' }
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
     <style>
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        .correct-bg { background-color: #d1fae5; border-color: #10b981; }
+        .wrong-bg { background-color: #fee2e2; border-color: #ef4444; }
+        .blinking { animation: blink 1s infinite; }
+        @keyframes blink {
+            0%, 100% { opacity: 1; fill: #3b82f6; }
+            50% { opacity: 0.3; fill: #93c5fd; }
         }
-        .card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
         }
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
         }
+        .modal-active { display: flex; }
     </style>
 </head>
-<body class="p-4 md:p-12 mathjax-process">
-    <div class="max-w-5xl mx-auto">
-        <!-- Заголовок -->
-        <header class="text-center mb-16">
-            <h1 class="text-5xl font-black text-slate-800 mb-6 tracking-tight">Фізичний Тренажер</h1>
-            <p class="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                Інтерактивні вправи для закріплення знань з механіки. Оберіть тему, щоб розпочати розрахунки.
-            </p>
+<body class="bg-slate-50 min-h-screen py-6 px-4 flex flex-col items-center font-sans">
+
+    <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-8">
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-extrabold text-slate-800 mb-4">Закон Гука</h1>
+            
+            <div class="flex flex-wrap justify-center gap-4 mb-6">
+                <input id="student-name" type="text" placeholder="Введіть ваше Прізвище та Ім'я" class="p-2 border rounded-lg w-64 outline-none focus:ring-2 focus:ring-blue-400">
+                <div class="bg-slate-100 px-4 py-2 rounded-lg font-mono text-xl border border-slate-200">
+                    Час: <span id="timer">00:00</span>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-xl inline-block border border-blue-100 shadow-sm">
+                <p class="text-2xl text-blue-900 font-serif italic">$F_{пруж} = k \cdot x$</p>
+            </div>
         </header>
 
-        <!-- Сітка з картками -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <!-- Картка: Закон Гука -->
-            <a href="huk.html" class="card bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex items-start space-x-6">
-                <div class="bg-blue-600 text-white p-5 rounded-2xl text-3xl shadow-lg shadow-blue-200 shrink-0">
-                    📏
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Закон Гука</h2>
-                    <p class="text-slate-500 leading-snug">
-                        Розрахунок сили пружності, жорсткості та видовження пружини ($F = k \cdot x$).
-                    </p>
-                    <span class="inline-block mt-4 text-blue-600 font-semibold text-sm">Почати вправу →</span>
-                </div>
-            </a>
-
-            <!-- Картка: Вага тіла -->
-            <a href="weight.html" class="card bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex items-start space-x-6">
-                <div class="bg-purple-600 text-white p-5 rounded-2xl text-3xl shadow-lg shadow-purple-200 shrink-0">
-                    ⚖️
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Вага тіла</h2>
-                    <p class="text-slate-500 leading-snug">
-                        Визначення сили, з якою тіло діє на опору або підвіс ($P = m \cdot g$).
-                    </p>
-                    <span class="inline-block mt-4 text-purple-600 font-semibold text-sm">Почати вправу →</span>
-                </div>
-            </a>
-
-            <!-- Картка: Сила тяжіння -->
-            <a href="gravity.html" class="card bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex items-start space-x-6">
-                <div class="bg-emerald-600 text-white p-5 rounded-2xl text-3xl shadow-lg shadow-emerald-200 shrink-0">
-                    🍎
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Сила тяжіння</h2>
-                    <p class="text-slate-500 leading-snug">
-                        Розрахунок сили притягання тіла до Землі ($F_{тяж} = m \cdot g$).
-                    </p>
-                    <span class="inline-block mt-4 text-emerald-600 font-semibold text-sm">Почати вправу →</span>
-                </div>
-            </a>
-
-            <!-- Картка: Сила тертя -->
-            <a href="friction.html" class="card bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex items-start space-x-6">
-                <div class="bg-orange-600 text-white p-5 rounded-2xl text-3xl shadow-lg shadow-orange-200 shrink-0">
-                    🛷
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2">Сила тертя</h2>
-                    <p class="text-slate-500 leading-snug">
-                        Обчислення сили тертя ковзання ($\text{F}_{тертя} = \mu \cdot N$).
-                    </p>
-                    <span class="inline-block mt-4 text-orange-600 font-semibold text-sm">Почати вправу →</span>
-                </div>
-            </a>
-
+        <div class="overflow-x-auto mb-6">
+            <table class="w-full text-left border-collapse border rounded-xl overflow-hidden shadow-sm">
+                <thead>
+                    <tr class="bg-slate-800 text-white text-sm md:text-base">
+                        <th class="p-4 font-semibold text-center border-r border-slate-700">Жорсткість, $k$</th>
+                        <th class="p-4 font-semibold text-center border-r border-slate-700">Видовження, $x$</th>
+                        <th class="p-4 font-semibold text-center">Сила пружності, $F_{пруж}$</th>
+                    </tr>
+                </thead>
+                <tbody id="exercise-body"></tbody>
+            </table>
         </div>
 
-        <!-- Футер -->
-        <footer class="mt-20 py-8 border-t border-slate-300 flex flex-col items-center">
-            <div class="flex space-x-4 mb-4">
-                <span class="px-3 py-1 bg-slate-200 rounded-full text-xs font-bold text-slate-500 uppercase">Physics v1.2</span>
-                <span class="px-3 py-1 bg-slate-200 rounded-full text-xs font-bold text-slate-500 uppercase">Educational</span>
-            </div>
-            <p class="text-slate-400 text-sm italic">
-                Оновлено для коректного відображення формул
-            </p>
-        </footer>
+        <div class="mt-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div id="status-message" class="text-lg font-medium h-8"></div>
+            <button onclick="resetExercise()" class="px-6 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition font-semibold">
+                Почати заново
+            </button>
+        </div>
     </div>
+
+    <!-- Підказка (Трикутник) -->
+    <div id="triangle-modal" class="modal-overlay" onclick="closeModal()">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-xs w-full relative" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h3 class="text-center font-bold text-slate-700 mb-6 text-lg">Магічний трикутник</h3>
+            <div class="relative w-full h-48 mb-4">
+                <svg viewBox="0 0 200 180" class="w-full h-full">
+                    <!-- Triangle Shape -->
+                    <path d="M100 10 L190 170 L10 170 Z" fill="none" stroke="#1e293b" stroke-width="3"/>
+                    <!-- Internal Lines limited to triangle boundaries -->
+                    <line x1="55" y1="90" x2="145" y2="90" stroke="#1e293b" stroke-width="3"/>
+                    <line x1="100" y1="90" x2="100" y2="170" stroke="#1e293b" stroke-width="3"/>
+                    <!-- Symbols -->
+                    <text id="tri-f" x="100" y="65" text-anchor="middle" font-family="serif" font-style="italic" font-size="28" fill="#1e293b">F</text>
+                    <text id="tri-k" x="65" y="140" text-anchor="middle" font-family="serif" font-style="italic" font-size="28" fill="#1e293b">k</text>
+                    <text id="tri-x" x="135" y="140" text-anchor="middle" font-family="serif" font-style="italic" font-size="28" fill="#1e293b">x</text>
+                </svg>
+            </div>
+            <div id="modal-formula" class="text-center text-xl font-serif text-blue-700 min-h-[1.5rem]"></div>
+        </div>
+    </div>
+
+    <!-- Вікно результату -->
+    <div id="result-modal" class="modal-overlay">
+        <div class="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-md w-full mx-4 border-4 border-emerald-400">
+            <h2 class="text-3xl font-black text-slate-800 mb-4">Вправу виконано!</h2>
+            <div class="text-left bg-slate-50 p-6 rounded-2xl mb-6">
+                <p class="text-lg text-slate-600">Учень: <span id="res-name" class="font-bold text-slate-900"></span></p>
+                <p class="text-lg text-slate-600">Ваш час: <span id="res-time" class="font-bold text-emerald-600 text-2xl"></span></p>
+            </div>
+            <p class="text-sm text-slate-400 mb-6">Зробіть скріншот цього вікна для звіту.</p>
+            <button onclick="location.reload()" class="w-full py-4 bg-emerald-500 text-white rounded-xl font-bold text-xl hover:bg-emerald-600 transition shadow-lg">
+                Спробувати ще раз
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const exercises = [
+            { k: "100 Н/м", x: "5 см", f: null, options: [2, 5, 10, 50, 100], correct: 5, target: 'f' },
+            { k: "400 Н/м", x: null, f: "80 Н", options: [0.1, 0.2, 0.5, 2, 5], correct: 0.2, target: 'x' },
+            { k: null, x: "10 см", f: "50 Н", options: [5, 50, 500, 1000, 5000], correct: 500, target: 'k' },
+            { k: "250 Н/м", x: "40 мм", f: null, options: [1, 5, 10, 25, 100], correct: 10, target: 'f' },
+            { k: "1 кН/м", x: null, f: "50 Н", options: [0.01, 0.05, 0.1, 0.2, 0.5], correct: 0.05, target: 'x' }
+        ];
+
+        let startTime, timerInterval;
+        let solvedCount = 0;
+        let audioCtx = null;
+
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+
+        function startTimer() {
+            if (timerInterval) return;
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const diff = Date.now() - startTime;
+                const m = Math.floor(diff / 60000).toString().padStart(2, '0');
+                const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+                document.getElementById('timer').textContent = `${m}:${s}`;
+            }, 1000);
+        }
+
+        function playSound(type) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.connect(g); g.connect(audioCtx.destination);
+            if (type === 'success') {
+                osc.type = 'sine'; osc.frequency.setValueAtTime(523, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+                g.gain.setValueAtTime(0.1, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            } else {
+                osc.type = 'square'; osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(60, audioCtx.currentTime + 0.2);
+                g.gain.setValueAtTime(0.1, audioCtx.currentTime); g.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            }
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        }
+
+        function checkAnswer(index, select) {
+            const val = parseFloat(select.value);
+            const isCorrect = Math.abs(val - exercises[index].correct) < 0.0001;
+            const cell = select.parentElement;
+            
+            startTimer();
+
+            if (isNaN(val)) return;
+
+            if (isCorrect) {
+                if (!cell.classList.contains('correct-bg')) {
+                    solvedCount++;
+                    cell.classList.add('correct-bg');
+                    cell.classList.remove('wrong-bg');
+                    select.disabled = true;
+                    playSound('success');
+                    checkCompletion();
+                }
+            } else {
+                cell.classList.add('wrong-bg');
+                playSound('error');
+            }
+        }
+
+        function checkCompletion() {
+            if (solvedCount === exercises.length) {
+                clearInterval(timerInterval);
+                const name = document.getElementById('student-name').value || "Анонім";
+                const time = document.getElementById('timer').textContent;
+                
+                document.getElementById('res-name').textContent = name;
+                document.getElementById('res-time').textContent = time;
+                document.getElementById('result-modal').classList.add('modal-active');
+            }
+        }
+
+        function showHint(target) {
+            const modal = document.getElementById('triangle-modal');
+            const formula = document.getElementById('modal-formula');
+            ['tri-f', 'tri-k', 'tri-x'].forEach(id => document.getElementById(id).classList.remove('blinking'));
+            document.getElementById(`tri-${target}`).classList.add('blinking');
+            if (target === 'f') formula.innerHTML = '$F_{пруж} = k \\cdot x$';
+            if (target === 'k') formula.innerHTML = '$k = \\frac{F_{пруж}}{x}$';
+            if (target === 'x') formula.innerHTML = '$x = \\frac{F_{пруж}}{k}$';
+            modal.classList.add('modal-active');
+            if (window.MathJax) window.MathJax.typesetPromise();
+        }
+
+        function closeModal() {
+            document.getElementById('triangle-modal').classList.remove('modal-active');
+        }
+
+        function renderRows() {
+            const tbody = document.getElementById('exercise-body');
+            tbody.innerHTML = '';
+            exercises.forEach((ex, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100";
+                ['k', 'x', 'f'].forEach(col => {
+                    const td = document.createElement('td');
+                    td.className = "p-4 text-center transition-all duration-300";
+                    if (ex[col] === null) {
+                        td.className += " flex items-center justify-center gap-1 md:gap-2";
+                        const sel = document.createElement('select');
+                        sel.className = "p-1 md:p-2 border border-slate-300 rounded-lg bg-white w-20 md:w-24 text-center font-bold outline-none focus:ring-2 focus:ring-blue-400";
+                        sel.innerHTML = '<option value="">?</option>' + ex.options.map(o => `<option value="${o}">${o}</option>`).join('');
+                        sel.onchange = () => checkAnswer(idx, sel);
+                        
+                        const unit = document.createElement('span');
+                        unit.className = "text-slate-500 text-xs md:text-sm font-medium w-8 text-left";
+                        unit.textContent = col === 'k' ? 'Н/м' : (col === 'x' ? 'м' : 'Н');
+
+                        const infoBtn = document.createElement('button');
+                        infoBtn.className = "text-blue-500 p-1 hover:scale-110 transition";
+                        infoBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+                        infoBtn.onclick = () => showHint(ex.target);
+
+                        td.appendChild(sel); td.appendChild(unit); td.appendChild(infoBtn);
+                    } else {
+                        td.textContent = ex[col];
+                        td.className += " font-medium text-slate-700 text-sm md:text-base";
+                    }
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            if (window.MathJax) window.MathJax.typesetPromise();
+        }
+
+        function resetExercise() {
+            location.reload();
+        }
+
+        window.onload = renderRows;
+    </script>
 </body>
 </html>
